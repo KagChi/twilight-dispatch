@@ -314,6 +314,7 @@ pub async fn run_jobs(conn: &mut redis_cluster_async::Connection, clusters: &[Ar
                     SessionInfo {
                         session_id: info.session_id().unwrap_or_default().to_owned(),
                         sequence: info.seq(),
+                        resume_url: info.resume_url().unwrap_or_default().to_owned()
                     },
                 );
             }

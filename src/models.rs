@@ -107,6 +107,7 @@ impl<'de> Deserialize<'de> for FormattedDateTime {
 pub struct SessionInfo {
     pub session_id: String,
     pub sequence: u64,
+    pub resume_url: String
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

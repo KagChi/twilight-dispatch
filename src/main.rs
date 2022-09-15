@@ -180,6 +180,7 @@ async fn real_main() -> ApiResult<()> {
                 SessionInfo {
                     session_id: value.session_id,
                     sequence: value.sequence,
+                    resume_url: value.resume_url.unwrap_or("wss://gateway.discord.gg".to_string())
                 },
             );
         }

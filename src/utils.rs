@@ -233,6 +233,7 @@ pub async fn get_resume_sessions(
                 ResumeSession {
                     session_id: v.session_id,
                     sequence: v.sequence,
+                    resume_url: Some(v.resume_url)
                 },
             )
         })
