@@ -11,7 +11,8 @@ hyper = { version = "0.14", default-features = false, features = ["server", "tcp
 lapin = { version = "2.0", default-features = false }
 lazy_static = { version = "1.4", default-features = false }
 prometheus = { version = "0.13", default-features = false, features = ["process"] }
-redis = { version = "0.21", default-features = false, features = ["tokio-comp"] }
+redis = { version = "0.21", default-features = false, features = ["tokio-comp", "cluster"] }
+redis_cluster_async = { version = "0.7.0"  }
 serde = { version = "1.0", default-features = false }
 serde_repr = { version = "0.1", default-features = false }
 simd-json = { version = "0.5", default-features = false, features = ["serde_impl"] }

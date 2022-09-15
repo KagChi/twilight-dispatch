@@ -15,6 +15,10 @@ separate from your application layer, bringing many benefits such as the followi
 If you encounter any issues while running the service, please feel free create an issue here, or you
 can contact CHamburr#2591 on Discord. We will try our best to help you.
 
+## Changes in fork
+- Include changes from [twilight-fork](https://github.com/tuneorg/twilight-dispatch)
+- Bump twilight packages [pr-draft](https://github.com/KagChi/twilight-dispatch/pull/3)
+
 ## Features
 
 -   Low CPU and RAM footprint

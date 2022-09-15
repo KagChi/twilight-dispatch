@@ -24,7 +24,7 @@ use twilight_gateway::{shard::raw_message::Message, Cluster, Event};
 use twilight_model::id::{marker::UserMarker, Id};
 
 pub async fn outgoing(
-    conn: &mut redis::aio::Connection,
+    conn: &mut redis_cluster_async::Connection,
     cluster: &Cluster,
     channel: &lapin::Channel,
     mut bot_id: Option<Id<UserMarker>>,

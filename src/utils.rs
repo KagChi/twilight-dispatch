@@ -208,14 +208,14 @@ pub fn get_queue() -> Arc<dyn Queue> {
     }
 }
 
-pub async fn get_current_user(conn: &mut redis::aio::Connection) -> ApiResult<Option<CurrentUser>> {
+pub async fn get_current_user(conn: &mut redis_cluster_async::Connection) -> ApiResult<Option<CurrentUser>> {
     let user = cache::get(conn, BOT_USER_KEY).await?;
 
     Ok(user)
 }
 
 pub async fn get_resume_sessions(
-    conn: &mut redis::aio::Connection,
+    conn: &mut redis_cluster_async::Connection,
 ) -> ApiResult<HashMap<u64, ResumeSession>> {
     let shards: u64 = cache::get(conn, SHARDS_KEY).await?.unwrap_or_default();
     if shards != CONFIG.shards_total || !CONFIG.resume {
