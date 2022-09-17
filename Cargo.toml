@@ -8,7 +8,7 @@ edition = "2021"
 dotenv = { version = "0.15", default-features = false }
 futures-util = { version = "0.3", default-features = false }
 hyper = { version = "0.14", default-features = false, features = ["server", "tcp", "http1"] }
-lapin = { version = "2.0", default-features = false }
+lapin = { version = "2.1", default-features = false }
 lazy_static = { version = "1.4", default-features = false }
 prometheus = { version = "0.13", default-features = false, features = ["process"] }
 redis = { version = "0.21", default-features = false, features = ["tokio-comp", "cluster"] }
