@@ -1291,7 +1291,20 @@ dependencies = [
  "serde",
  "serde_json",
  "simdutf8",
- "value-trait",
+ "value-trait 0.2.12",
+]
+
+[[package]]
+name = "simd-json"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9bd78b840b9de64fa3f7d72909b76343849f68e8c3d32608db8d38e4e5481f84"
+dependencies = [
+ "halfbrown",
+ "serde",
+ "serde_json",
+ "simdutf8",
+ "value-trait 0.4.0",
 ]
 
 [[package]]
@@ -1588,7 +1601,7 @@ dependencies = [
  "redis_cluster_async",
  "serde",
  "serde_repr",
- "simd-json",
+ "simd-json 0.6.0",
  "time",
  "tokio",
  "tracing",
@@ -1611,7 +1624,7 @@ dependencies = [
  "rustls",
  "serde",
  "serde_json",
- "simd-json",
+ "simd-json 0.5.1",
  "tokio",
  "tokio-tungstenite",
  "tracing",
@@ -1645,7 +1658,7 @@ dependencies = [
  "rand",
  "serde",
  "serde_json",
- "simd-json",
+ "simd-json 0.5.1",
  "tokio",
  "tracing",
  "twilight-http-ratelimiting",
@@ -1748,6 +1761,18 @@ dependencies = [
  "float-cmp",
  "halfbrown",
  "itoa 0.4.8",
+ "ryu",
+]
+
+[[package]]
+name = "value-trait"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c0a635407649b66e125e4d2ffd208153210179f8c7c8b71c030aa2ad3eeb4c8f"
+dependencies = [
+ "float-cmp",
+ "halfbrown",
+ "itoa 1.0.2",
  "ryu",
 ]
 
