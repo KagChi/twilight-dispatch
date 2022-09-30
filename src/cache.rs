@@ -27,7 +27,7 @@ use twilight_model::{
     },
 };
 
-pub async fn get<K, T>(conn: &mut redis_cluster_async::Connection, key: K) -> ApiResult<Option<T>>
+pub async fn get<K, T>(conn: &mut redis::aio::Connection, key: K) -> ApiResult<Option<T>>
 where
     K: ToRedisArgs + Send + Sync,
     T: DeserializeOwned,
@@ -40,7 +40,7 @@ where
 }
 
 pub async fn get_all<K, T>(
-    conn: &mut redis_cluster_async::Connection,
+    conn: &mut redis::aio::Connection,
     keys: &[K],
 ) -> ApiResult<Vec<Option<T>>>
 where
@@ -62,7 +62,7 @@ where
         .collect()
 }
 
-pub async fn get_members<K, T>(conn: &mut redis_cluster_async::Connection, key: K) -> ApiResult<Vec<T>>
+pub async fn get_members<K, T>(conn: &mut redis::aio::Connection, key: K) -> ApiResult<Vec<T>>
 where
     K: ToRedisArgs + Send + Sync,
     T: FromRedisValue,
@@ -72,7 +72,7 @@ where
     Ok(res)
 }
 
-pub async fn get_members_len<K>(conn: &mut redis_cluster_async::Connection, key: K) -> ApiResult<u64>
+pub async fn get_members_len<K>(conn: &mut redis::aio::Connection, key: K) -> ApiResult<u64>
 where
     K: ToRedisArgs + Send + Sync,
 {
@@ -82,7 +82,7 @@ where
 }
 
 pub async fn get_hashmap<K, T, U>(
-    conn: &mut redis_cluster_async::Connection,
+    conn: &mut redis::aio::Connection,
     key: K,
 ) -> ApiResult<HashMap<T, U>>
 where
@@ -95,7 +95,7 @@ where
     Ok(res)
 }
 
-pub async fn set<K, T>(conn: &mut redis_cluster_async::Connection, key: K, value: T) -> ApiResult<()>
+pub async fn set<K, T>(conn: &mut redis::aio::Connection, key: K, value: T) -> ApiResult<()>
 where
     K: AsRef<str>,
     T: Serialize,
@@ -105,7 +105,7 @@ where
     Ok(())
 }
 
-pub async fn set_all<I, K, T>(conn: &mut redis_cluster_async::Connection, keys: I) -> ApiResult<()>
+pub async fn set_all<I, K, T>(conn: &mut redis::aio::Connection, keys: I) -> ApiResult<()>
 where
     I: IntoIterator<Item = (K, T)>,
     K: AsRef<str>,
@@ -163,7 +163,7 @@ where
     Ok(())
 }
 
-pub async fn expire<K>(conn: &mut redis_cluster_async::Connection, key: K, expiry: u64) -> ApiResult<()>
+pub async fn expire<K>(conn: &mut redis::aio::Connection, key: K, expiry: u64) -> ApiResult<()>
 where
     K: ToRedisArgs + Send + Sync,
 {
@@ -172,7 +172,7 @@ where
     Ok(())
 }
 
-pub async fn expire_all<I, K>(conn: &mut redis_cluster_async::Connection, keys: I) -> ApiResult<()>
+pub async fn expire_all<I, K>(conn: &mut redis::aio::Connection, keys: I) -> ApiResult<()>
 where
     I: IntoIterator<Item = (K, u64)>,
     K: ToRedisArgs + Send + Sync,
@@ -197,7 +197,7 @@ where
     Ok(())
 }
 
-pub async fn del_all<I, K>(conn: &mut redis_cluster_async::Connection, keys: I) -> ApiResult<()>
+pub async fn del_all<I, K>(conn: &mut redis::aio::Connection, keys: I) -> ApiResult<()>
 where
     I: IntoIterator<Item = K>,
     K: AsRef<str>,
@@ -254,14 +254,14 @@ where
     Ok(())
 }
 
-pub async fn del(conn: &mut redis_cluster_async::Connection, key: impl AsRef<str>) -> ApiResult<()> {
+pub async fn del(conn: &mut redis::aio::Connection, key: impl AsRef<str>) -> ApiResult<()> {
     del_all(conn, iter::once(key)).await?;
 
     Ok(())
 }
 
 pub async fn del_hashmap<K>(
-    conn: &mut redis_cluster_async::Connection,
+    conn: &mut redis::aio::Connection,
     key: K,
     keys: &[String],
 ) -> ApiResult<()>
@@ -277,7 +277,7 @@ where
     Ok(())
 }
 
-pub async fn run_jobs(conn: &mut redis_cluster_async::Connection, clusters: &[Arc<Cluster>]) {
+pub async fn run_jobs(conn: &mut redis::aio::Connection, clusters: &[Arc<Cluster>]) {
     loop {
         let mut statuses = vec![];
         let mut sessions = HashMap::new();
@@ -314,7 +314,7 @@ pub async fn run_jobs(conn: &mut redis_cluster_async::Connection, clusters: &[Ar
                     SessionInfo {
                         session_id: info.session_id().unwrap_or_default().to_owned(),
                         sequence: info.seq(),
-                        resume_url: info.resume_url().unwrap_or_default().to_owned()
+                        resume_url: info.gateway_url().to_string()
                     },
                 );
             }
@@ -334,7 +334,7 @@ pub async fn run_jobs(conn: &mut redis_cluster_async::Connection, clusters: &[Ar
     }
 }
 
-pub async fn run_cleanups(conn: &mut redis_cluster_async::Connection) {
+pub async fn run_cleanups(conn: &mut redis::aio::Connection) {
     loop {
         let hashmap: ApiResult<HashMap<String, String>> = get_hashmap(conn, EXPIRY_KEYS).await;
 
@@ -371,7 +371,7 @@ pub async fn run_cleanups(conn: &mut redis_cluster_async::Connection) {
 }
 
 async fn clear_guild<T: DeserializeOwned>(
-    conn: &mut redis_cluster_async::Connection,
+    conn: &mut redis::aio::Connection,
     guild_id: Id<GuildMarker>,
 ) -> ApiResult<Option<T>> {
     let members: Vec<String> =
@@ -387,7 +387,7 @@ async fn clear_guild<T: DeserializeOwned>(
 }
 
 pub async fn update(
-    conn: &mut redis_cluster_async::Connection,
+    conn: &mut redis::aio::Connection,
     event: &Event,
     bot_id: Id<UserMarker>,
 ) -> ApiResult<Option<Value>> {

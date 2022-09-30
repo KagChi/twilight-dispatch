@@ -131,7 +131,7 @@ struct StateStats {
     voices: u64,
 }
 
-async fn get_state_stats(conn: &mut redis_cluster_async::Connection) -> ApiResult<StateStats> {
+async fn get_state_stats(conn: &mut redis::aio::Connection) -> ApiResult<StateStats> {
     let guilds = cache::get_members_len(conn, format!("{}{}", GUILD_KEY, KEYS_SUFFIX)).await?;
     let channels = cache::get_members_len(conn, format!("{}{}", CHANNEL_KEY, KEYS_SUFFIX)).await?;
     let messages = cache::get_members_len(conn, format!("{}{}", MESSAGE_KEY, KEYS_SUFFIX)).await?;
@@ -154,7 +154,7 @@ async fn get_state_stats(conn: &mut redis_cluster_async::Connection) -> ApiResul
     })
 }
 
-pub async fn run_jobs(conn: &mut redis_cluster_async::Connection, clusters: &[Arc<Cluster>]) {
+pub async fn run_jobs(conn: &mut redis::aio::Connection, clusters: &[Arc<Cluster>]) {
     loop {
         GATEWAY_SHARDS.set(
             clusters

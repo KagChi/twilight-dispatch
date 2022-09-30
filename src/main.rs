@@ -40,9 +40,12 @@ async fn main() {
 
 async fn real_main() -> ApiResult<()> {
 
-    let redis = redis_cluster_async::Client::open(CONFIG.redis_cluster_nodes.to_vec())?;
+    let redis = redis::Client::open(format!(
+        "redis://{}:{}@{}:{}/",
+        CONFIG.redis_username, CONFIG.redis_password, CONFIG.redis_host, CONFIG.redis_port
+    ))?;
 
-    let mut conn = redis.get_connection().await?;
+    let mut conn = redis.get_async_connection().await?;
 
     let amqp = lapin::Connection::connect(
         format!(
@@ -128,9 +131,10 @@ async fn real_main() -> ApiResult<()> {
         let _ = metrics::run_server().await;
     });
 
-    let mut conn_clone = redis.get_connection().await?;
-    let mut conn_clone_two = redis.get_connection().await?;
-    let mut conn_clone_three = redis.get_connection().await?;
+    let mut conn_clone = redis.get_async_connection().await?;
+    let mut conn_clone_two = redis.get_async_connection().await?;
+    let mut conn_clone_three = redis.get_async_connection().await?;
+
     let clusters_clone = clusters.clone();
     tokio::spawn(async move {
         join!(
@@ -147,7 +151,7 @@ async fn real_main() -> ApiResult<()> {
             cluster_clone.up().await;
         });
 
-        let mut conn_clone = redis.get_connection().await?;
+        let mut conn_clone = redis.get_async_connection().await?;
         let cluster_clone = cluster.clone();
         let channel_clone = channel.clone();
         tokio::spawn(async move {
