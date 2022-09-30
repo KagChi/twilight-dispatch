@@ -1577,7 +1577,7 @@ dependencies = [
  "redis_cluster_async",
  "serde",
  "serde_repr",
- "simd-json 0.5.1",
+ "simd-json 0.6.0",
  "time",
  "tokio",
  "tracing",
